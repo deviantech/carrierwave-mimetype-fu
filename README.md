@@ -1,18 +1,14 @@
 # CarrierWave::MimetypeFu
 
-This allows to set file type with MimetypeFu instead of an extension.
+This allows to set file type with MimetypeFu rather than relying on the uploaded file's extension.
 
-To set correct file extension on resulting files on disk:
-
-Add this to your uploader (or any other way)
+To update the saved file's filename to use to correct extension after uploading, call +apply_correct_extension_on_upload+ in the +filename+ method of your uploader:
 
     def filename
-        if original_filename.present?
-            ext = MIME::Types[file.content_type].nil? ? file.extension : MIME::Types[file.content_type].first.extensions.first
-            split_extension(original_filename)[0] + '.' + ext
-        end
+      apply_correct_extension_on_upload
     end
 
+This will return the original filename with the correct extension in place.
 
 Based on the [carrierwave-magic](https://github.com/glebtv/carrierwave-magic) gem, but using [MimetypeFu](https://github.com/mattetti/mimetype-fu) rather than requiring installation of libmagic.
 
