@@ -1,16 +1,8 @@
 # CarrierWave::MimetypeFu
 
-This allows to set file type with MimetypeFu rather than relying on the uploaded file's extension.
+By default, carrierwave uses the uploaded file's extension to guess the content type.  Sometimes you'd prefer to actually look at the file and set the content type based on that, so users can't upload php files as *i\_am\_lying.jpg* and have the server try to process them as images.
 
-To update the saved file's filename to use to correct extension after uploading, call +apply_correct_extension_on_upload+ in the +filename+ method of your uploader:
-
-    def filename
-      apply_correct_extension_on_upload
-    end
-
-This will return the original filename with the correct extension in place.
-
-Based on the [carrierwave-magic](https://github.com/glebtv/carrierwave-magic) gem, but using [MimetypeFu](https://github.com/mattetti/mimetype-fu) rather than requiring installation of libmagic.
+This gem checks the file when it's first uploaded, sets the content type as appropriate and, if the filename's original extension doesn't match the content type, renames it so it does.
 
 ## Installation
 
@@ -20,7 +12,7 @@ Add this line to your application's Gemfile:
 
 And then execute:
 
-    $ bundle
+    $ bundle install
 
 Or install it yourself as:
 
@@ -28,10 +20,18 @@ Or install it yourself as:
 
 ## Usage
 
+Just include the module in your uploader:
+
     class ImageUploader < CarrierWave::Uploader::Base
       include CarrierWave::MimetypeFu
-      process :set_mimetype_fu_content_type
     end
+
+And now uploaded files' content\_type will be set appropriately, and uploads will automatically be renamed before being passed on to the processors. Given a jpeg file named *test\_1.pdf*, the file will be renamed *test\_1.jpg* before being passed off to normal carrierwave processing.
+
+## History
+
+Originally based on the [carrierwave-magic](https://github.com/glebtv/carrierwave-magic) gem, but using [MimetypeFu](https://github.com/mattetti/mimetype-fu) rather than requiring installation of libmagic.  Shifted to a different approach in order to check the content type early enough to automatically rename the upload with the proper extension before the processors go to work.
+
 
 ## Contributing
 
