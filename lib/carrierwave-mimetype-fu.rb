@@ -5,7 +5,7 @@ module CarrierWave
     extend ActiveSupport::Concern
 
     included do
-      mod = Module new do
+      mod = Module.new do
         def cache!(new_file = sanitized_file)
           # Only step in on the initial file upload
           opened_file = case new_file
