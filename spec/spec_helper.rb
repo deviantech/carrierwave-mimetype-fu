@@ -4,6 +4,8 @@ require "rubygems"
 require "bundler/setup"
 require "rspec"
 require "rails"
+require "marcel"
+require "mimemagic"
 
 require "carrierwave"
 require "carrierwave-mimetype-fu"
@@ -18,7 +20,7 @@ end
 
 def uploaded_file(file)
   filename = File.basename(file.path)
-  type = MIME::Types.type_for(filename).first
+  type = Marcel::MimeType.for(filename)
   ActionDispatch::Http::UploadedFile.new(tempfile: file,
                                          filename: filename,
                                          type:     type)

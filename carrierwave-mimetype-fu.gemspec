@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Kali Donovan"]
   gem.email         = ["kali@deviantech.com"]
   gem.description   = %q{mimetype-fu for carrierwave}
-  gem.summary       = %q{Carrierwave extension to set file content type and extension with mimetype-fu}
+  gem.summary       = %q{Carrierwave extension to set file content type and extension}
   gem.homepage      = "https://github.com/deviantech/carrierwave-mimetype-fu"
 
   gem.files         = `git ls-files`.split($/)
@@ -17,7 +17,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_runtime_dependency "mimetype-fu"
+  gem.add_runtime_dependency "marcel"
   gem.add_runtime_dependency "carrierwave"
 
   gem.add_development_dependency "rake"

@@ -65,7 +65,7 @@ describe CarrierWave::MimetypeFu do
       include_examples "have a mime type of", "application/octet-stream"
     end
 
-    describe "with wrong extension" do
+    describe "with wrong extension", :focus do
 
       let(:file) { uploaded_file(File.new(file_path("ruby.gif"))) }
 

@@ -8,10 +8,10 @@ module CarrierWave
       mod = Module.new do
         def cache!(new_file = sanitized_file)
           # Only step in on the initial file upload
-          opened_file = case new_file
-                          when CarrierWave::Uploader::Download::RemoteFile then
+          opened_file = case new_file.class.name
+                          when 'CarrierWave::Uploader::Download::RemoteFile', 'CarrierWave::Downloader::RemoteFile' then
                             new_file.send(:file)
-                          when ActionDispatch::Http::UploadedFile then
+                          when 'ActionDispatch::Http::UploadedFile' then
                             File.open(new_file.path)
                           else
                             nil
@@ -22,8 +22,8 @@ module CarrierWave
 
           begin
             # Collect information about the real content type
-            real_content_type = File.mime_type?(opened_file).split(';').first
-            valid_extensions  = Array(MIME::Types[real_content_type].try(:first).try(:extensions))
+            real_content_type = Marcel::MimeType.for(opened_file).split(';').first
+            valid_extensions  = Array( MimeMagic::TYPES[real_content_type]&.first )
 
             # Set proper content type, and update filename if current name doesn't match reach content type
             new_file              = CarrierWave::SanitizedFile.new(new_file)
@@ -43,9 +43,9 @@ module CarrierWave
       prepend mod
 
       begin
-        require 'mimetype_fu'
+        require 'marcel'
       rescue LoadError => e
-        e.message << ' (You may need to install the mimetype-fu gem)'
+        e.message << ' (You may need to install the marcel gem)'
         raise e
       end
     end
